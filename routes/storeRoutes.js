@@ -6,22 +6,24 @@ import {
   updateStore, 
   deleteStore 
 } from '../controllers/storeController.js';
+import {authenticate} from '../middleware/authMiddleware.js';
+
 
 const router = express.Router();
 
 // Route to create a new store (Private/Admin)
-router.post('/', createStore);
+router.post('/',authenticate, createStore);
 
 // Route to get all stores (Public)
-router.get('/', getStores);
+router.get('/',authenticate, getStores);
 
 // Route to get a single store by ID (Public)
-router.get('/:id', getStoreById);
+router.get('/:id',authenticate, getStoreById);
 
 // Route to update a store (Private/Admin)
-router.put('/:id', updateStore);
+router.put('/:id',authenticate, updateStore);
 
 // Route to delete a store (Private/Admin)
-router.delete('/:id', deleteStore);
+router.delete('/:id',authenticate, deleteStore);
 
 export default router;
