@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
-const storeSchema = new mongoose.Schema({
+const storeSchema = new mongoose.Schema(
+  {
     name: { type: String, required: true, unique: true },
     logo: { type: String, required: true },
     totalCoupons: { type: Number, default: 0 },
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Store', storeSchema);
+export default mongoose.model("Store", storeSchema);
