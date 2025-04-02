@@ -1,5 +1,10 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import adminRoutes from './routes/adminRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
+import storeRoutes from './routes/storeRoutes.js';
 
 dotenv.config();
 
@@ -8,6 +13,11 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/stores', storeRoutes);
 
 // Sample route
 app.get('/', (req, res) => {
