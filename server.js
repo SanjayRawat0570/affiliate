@@ -1,15 +1,19 @@
-import dotenv from 'dotenv';
 import express from 'express';
+
+import env from 'dotenv';
+
 import adminRoutes from './routes/adminRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import storeRoutes from './routes/storeRoutes.js';
+import connectDB from "./config/db.js";
 
-dotenv.config();
+env.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 // Middleware
 app.use(express.json());

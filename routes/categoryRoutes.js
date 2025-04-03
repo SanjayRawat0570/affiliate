@@ -7,12 +7,13 @@ import {
   deleteCategory 
 } from '../controllers/categoryController.js';
 import {authenticate} from '../middleware/authMiddleware.js';
+import { upload } from '../config/cloudinary.js';
 
 
 const router = express.Router();
 
 // Create a new category (Private/Admin)
-router.post('/',authenticate, createCategory); // POST /api/categories
+router.post('/',authenticate,upload.single('image'), createCategory); // POST /api/categories
 
 // Get all categories (Public)
 router.get('/',authenticate, getCategories); // GET /api/categories
@@ -21,7 +22,7 @@ router.get('/',authenticate, getCategories); // GET /api/categories
 router.get('/:id',authenticate, getCategoryById); // GET /api/categories/:id
 
 // Update category (Private/Admin)
-router.put('/:id',authenticate, updateCategory); // PUT /api/categories/:id
+router.put('/:id',authenticate,upload.single('image'), updateCategory); // PUT /api/categories/:id
 
 // Delete category (Private/Admin)
 router.delete('/:id',authenticate, deleteCategory); // DELETE /api/categories/:id

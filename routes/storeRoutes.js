@@ -7,12 +7,12 @@ import {
   deleteStore 
 } from '../controllers/storeController.js';
 import {authenticate} from '../middleware/authMiddleware.js';
-
+import {upload} from "../config/cloudinary.js"; 
 
 const router = express.Router();
 
 // Route to create a new store (Private/Admin)
-router.post('/',authenticate, createStore);
+router.post('/',authenticate,upload.single('logo') ,createStore);
 
 // Route to get all stores (Public)
 router.get('/',authenticate, getStores);
@@ -21,7 +21,7 @@ router.get('/',authenticate, getStores);
 router.get('/:id',authenticate, getStoreById);
 
 // Route to update a store (Private/Admin)
-router.put('/:id',authenticate, updateStore);
+router.put('/:id',authenticate,upload.single('logo'), updateStore);
 
 // Route to delete a store (Private/Admin)
 router.delete('/:id',authenticate, deleteStore);

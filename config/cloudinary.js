@@ -2,7 +2,8 @@
 import multer from 'multer';
 import fs from "fs/promises";
 import {v2 as cloudinary} from 'cloudinary';
-
+import env from "dotenv"
+env.config();
 
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,7 +27,6 @@ const uploadToCloudinary=async (filePath)=>{
 export const deleteFromCloudinary=async (public_id)=>{
     try{
         const result=await cloudinary.uploader.destroy(public_id);
-        console.log(result);
     }
     catch(error)
     {
@@ -37,7 +37,6 @@ export const deleteFromCloudinary=async (public_id)=>{
 export const getPublicId=(url)=>{
     const parts=url.split("/");
     const id= ((parts.slice(parts.indexOf("upload")+2)).join("/")).split('.')[0];
-    console.log(id);
     return id;
 
 }

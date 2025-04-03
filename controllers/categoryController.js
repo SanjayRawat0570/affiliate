@@ -1,4 +1,9 @@
-import Category from '../models/categoryModel.js';
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  getPublicId,
+} from "../config/cloudinary.js";
+import Category from "../models/categoryModel.js";
 
 /**
  * @desc    Create a new category
@@ -7,9 +12,20 @@ import Category from '../models/categoryModel.js';
  */
 export const createCategory = async (req, res) => {
   try {
-    const { name, image } = req.body;
+    const { name } = req.body;
     let { totalCoupons } = req.body;
-    
+
+    let image;
+
+    if (req?.file) {
+      try {
+        const cloudinaryUrl = await uploadToCloudinary(req.file.path);
+        image = cloudinaryUrl.secure_url;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     // Set default value for totalCoupons if not provided
     totalCoupons = totalCoupons || 0;
 
@@ -17,7 +33,7 @@ export const createCategory = async (req, res) => {
     if (!name || !image) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide name and image'
+        message: "Please provide name and image",
       });
     }
 
@@ -26,7 +42,7 @@ export const createCategory = async (req, res) => {
     if (categoryExists) {
       return res.status(400).json({
         success: false,
-        message: 'Category with this name already exists'
+        message: "Category with this name already exists",
       });
     }
 
@@ -34,18 +50,18 @@ export const createCategory = async (req, res) => {
     const category = await Category.create({
       name,
       image,
-      totalCoupons
+      totalCoupons,
     });
 
     res.status(201).json({
       success: true,
-      category
+      category,
     });
   } catch (error) {
-    console.error('Create category error:', error);
+    console.error("Create category error:", error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: "Server error",
     });
   }
 };
@@ -62,13 +78,13 @@ export const getCategories = async (req, res) => {
     res.status(200).json({
       success: true,
       count: categories.length,
-      categories
+      categories,
     });
   } catch (error) {
-    console.error('Get categories error:', error);
+    console.error("Get categories error:", error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: "Server error",
     });
   }
 };
@@ -85,28 +101,28 @@ export const getCategoryById = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      category
+      category,
     });
   } catch (error) {
-    console.error('Get category error:', error);
-    
+    console.error("Get category error:", error);
+
     // Handle invalid ObjectId format
-    if (error.kind === 'ObjectId') {
+    if (error.kind === "ObjectId") {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: "Server error",
     });
   }
 };
@@ -124,13 +140,28 @@ export const updateCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
     // Extract only allowed fields for update
-    const { image, totalCoupons } = req.body;
-    
+    const { totalCoupons } = req.body;
+
+    let image;
+    if (req?.file) {
+      const cloudinaryUrl = await uploadToCloudinary(req.file.path);
+
+      if (category?.image) {
+        try {
+          const public_id = getPublicId(category.image);
+          const result = await deleteFromCloudinary(public_id);
+        } catch (er) {
+          console.log(er);
+        }
+      }
+      image = cloudinaryUrl.secure_url;
+    }
+
     // Create update object with only allowed fields
     const updateData = {};
     if (image) updateData.image = image;
@@ -140,7 +171,7 @@ export const updateCategory = async (req, res) => {
     if (req.body.name && req.body.name !== category.name) {
       return res.status(400).json({
         success: false,
-        message: 'Category name cannot be updated'
+        message: "Category name cannot be updated",
       });
     }
 
@@ -153,21 +184,21 @@ export const updateCategory = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      category
+      category,
     });
   } catch (error) {
-    console.error('Update category error:', error);
-    
-    if (error.kind === 'ObjectId') {
+    console.error("Update category error:", error);
+
+    if (error.kind === "ObjectId") {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: "Server error",
     });
   }
 };
@@ -184,7 +215,7 @@ export const deleteCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
@@ -192,21 +223,21 @@ export const deleteCategory = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Category deleted successfully'
+      message: "Category deleted successfully",
     });
   } catch (error) {
-    console.error('Delete category error:', error);
-    
-    if (error.kind === 'ObjectId') {
+    console.error("Delete category error:", error);
+
+    if (error.kind === "ObjectId") {
       return res.status(404).json({
         success: false,
-        message: 'Category not found'
+        message: "Category not found",
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: "Server error",
     });
   }
 };

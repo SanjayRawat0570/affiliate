@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import User from "../models/userModel";
 export const authenticate = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   if (!token) {
@@ -10,8 +9,7 @@ export const authenticate = async (req, res, next) => {
     if (!decoded) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-    
-    req.body.userId = decoded.id;
+    req.userId = decoded.id;
     next();
   } catch (err) {
     console.log(err);

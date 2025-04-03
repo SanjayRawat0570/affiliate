@@ -1,5 +1,7 @@
 import Store from '../models/storeModel.js';
 
+import { uploadToCloudinary,deleteFromCloudinary,getPublicId } from '../config/cloudinary.js';
+
 /**
  * @desc    Create a new store
  * @route   POST /api/stores
@@ -7,8 +9,25 @@ import Store from '../models/storeModel.js';
  */
 export const createStore = async (req, res) => {
   try {
-    const { name, logo } = req.body;
+    const { name } = req.body;
     let { totalCoupons } = req.body;
+    let logo;
+   
+
+    if(req?.file)
+    {
+      try{
+       
+
+        const cloudinaryUrl=await uploadToCloudinary(req.file.path);
+        logo=cloudinaryUrl.secure_url;
+
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+    }
     
     // Set default value for totalCoupons if not provided
     totalCoupons = totalCoupons || 0;
@@ -34,7 +53,7 @@ export const createStore = async (req, res) => {
     const store = await Store.create({
         name,
         logo,
-        totalCoupons:coupon
+        totalCoupons:Number.parseInt(totalCoupons)
     });
 
     res.status(201).json({
@@ -129,7 +148,29 @@ export const updateStore = async (req, res) => {
     }
 
     // Extract only allowed fields for update
-    const { logo, totalCoupons } = req.body;
+    const { totalCoupons } = req.body;
+    let logo;
+    if(req?.file)
+    {
+      const cloudinaryUrl=await uploadToCloudinary(req.file.path);
+      
+
+
+      if(store?.logo)
+      {
+        try{
+          const public_id=getPublicId(store.logo);
+          const result=await deleteFromCloudinary(public_id);
+          
+        }
+        catch(er)
+        {
+          console.log(er);
+        }
+      }
+      logo=cloudinaryUrl.secure_url;
+
+    }
     
     // Create update object with only allowed fields
     const updateData = {};
