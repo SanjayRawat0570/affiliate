@@ -1,4 +1,6 @@
 import Coupon from '../models/couponModel.js';
+import Store from "../models/storeModel.js";
+import Category from "../models/categoryModel.js";
 
 // Create a new coupon
 export const createCoupon = async (req, res) => {
@@ -14,7 +16,7 @@ export const createCoupon = async (req, res) => {
 // Get all coupons
 export const getAllCoupons = async (req, res) => {
     try {
-        const coupons = await Coupon.find();
+        const coupons = await Coupon.find().populate("store category");
         res.status(200).json(coupons);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -24,7 +26,7 @@ export const getAllCoupons = async (req, res) => {
 // Get a single coupon by ID
 export const getCouponById = async (req, res) => {
     try {
-        const coupon = await Coupon.findById(req.params.id);
+        const coupon = await Coupon.findById(req.params.id).populate("store category");
         if (!coupon) return res.status(404).json({ message: 'Coupon not found' });
         res.status(200).json(coupon);
     } catch (error) {
