@@ -9,9 +9,13 @@ import couponRoutes from './routes/couponRoutes.js';
 import storeRoutes from './routes/storeRoutes.js';
 import connectDB from "./config/db.js";
 
+import cors from "cors";
+
 env.config();
 
 const app = express();
+
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 
