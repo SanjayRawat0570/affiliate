@@ -16,10 +16,10 @@ const router = express.Router();
 router.post('/',authenticate,upload.single('image'), createCategory); // POST /api/categories
 
 // Get all categories (Public)
-router.get('/',authenticate, getCategories); // GET /api/categories
+router.get('/',getCategories); // GET /api/categories
 
 // Get single category by ID (Public)
-router.get('/:id',authenticate, getCategoryById); // GET /api/categories/:id
+router.get('/:id', getCategoryById); // GET /api/categories/:id
 
 // Update category (Private/Admin)
 router.put('/:id',authenticate,upload.single('image'), updateCategory); // PUT /api/categories/:id

@@ -15,10 +15,10 @@ const router = express.Router();
 router.post('/',authenticate,upload.single('logo') ,createStore);
 
 // Route to get all stores (Public)
-router.get('/',authenticate, getStores);
+router.get('/', getStores);
 
 // Route to get a single store by ID (Public)
-router.get('/:id',authenticate, getStoreById);
+router.get('/:id', getStoreById);
 
 // Route to update a store (Private/Admin)
 router.put('/:id',authenticate,upload.single('logo'), updateStore);
