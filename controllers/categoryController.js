@@ -15,7 +15,7 @@ export const createCategory = async (req, res) => {
     const { name } = req.body;
     let { totalCoupons } = req.body;
 
-    let image;
+    let image = req.body.image;
 
     if (req?.file) {
       try {

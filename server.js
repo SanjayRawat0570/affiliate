@@ -7,15 +7,20 @@ import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import storeRoutes from './routes/storeRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 import connectDB from "./config/db.js";
 
+
+
 import cors from "cors";
+
 
 env.config();
 
 const app = express();
 
 app.use(cors());
+
 const PORT = process.env.PORT || 3000;
 
 
@@ -26,6 +31,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/stores', storeRoutes);
+app.use('/api/products', productRoutes);
+
 
 // Sample route
 app.get('/', (req, res) => {

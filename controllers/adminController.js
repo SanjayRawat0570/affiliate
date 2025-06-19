@@ -230,7 +230,7 @@ export const getAnalytics = async (req, res) => {
 export const bulkUpdateCouponStatus = async (req, res) => {
   try {
     const { couponIds, status } = req.body;
-    
+          
     if (!couponIds || !Array.isArray(couponIds) || couponIds.length === 0) {
       return res.status(400).json({
         success: false,
@@ -273,7 +273,7 @@ export const bulkUpdateCouponStatus = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { name, email } = req.body;
-    const userId = req.user.id; // Assuming user ID is available from auth middleware
+    const userId =  req.userId; // Assuming user ID is available from auth middleware
     
     // Find the user
     const user = await User.findById(userId);

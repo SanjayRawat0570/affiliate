@@ -11,7 +11,7 @@ export const createStore = async (req, res) => {
   try {
     const { name } = req.body;
     let { totalCoupons } = req.body;
-    let logo;
+    let logo = req.body.logo;
    
 
     if(req?.file)

@@ -25,7 +25,7 @@ router.get('/users',authenticate, getAdminUsers); // GET /api/admin/users
 router.put('/coupons/:id/featured',authenticate, updateFeaturedStatus); // PUT /api/admin/coupons/:id/featured
 
 // Get analytics by store or category
-router.get('/analytics/store/:storeId',authenticate, getAnalytics); // GET /api/admin/analytics/store/:storeId
+router.get('/analytics/:type/:id',authenticate, getAnalytics); // GET /api/admin/analytics/store/:storeId
 router.get('/analytics/category/:categoryId',authenticate, getAnalytics); // GET /api/admin/analytics/category/:categoryId
 
 // Bulk update coupon status
